@@ -5,5 +5,6 @@ namespace ECommerceStore.Models
     public interface IProductRepository
     {
         IEnumerable<Product> Products { get; }
+        void Save(Product product);
     }
 }
