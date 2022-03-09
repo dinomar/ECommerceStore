@@ -4,6 +4,7 @@ namespace ECommerceStore.Models
 {
     public interface ICategoryRepository
     {
-        public IEnumerable<Catagory> Catagories { get; }
+        IEnumerable<Catagory> Catagories { get; }
+        void Save(Catagory catagory);
     }
 }

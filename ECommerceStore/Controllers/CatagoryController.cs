@@ -23,5 +23,23 @@ namespace ECommerceStore.Controllers
         {
             return View(_repo.Catagories);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Catagory catagory)
+        {
+            if (ModelState.IsValid)
+            {
+                _repo.Save(catagory);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(catagory);
+        }
     }
 }
