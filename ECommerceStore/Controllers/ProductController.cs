@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
+using RandomIdGeneratorLib;
 
 namespace ECommerceStore.Controllers
 {
@@ -40,9 +41,10 @@ namespace ECommerceStore.Controllers
             {
                 if (model.Image != null && model.Image.Length > 0)
                 {
-                    // TODO: generate random name.
-                    string fileName = Path.GetFileName(model.Image.FileName);
+                    string ext = Path.GetExtension(model.Image.FileName);
+                    string fileName = IdGenerator.Generate(10) + ext;
                     string path = Path.Combine(_env.WebRootPath, "images", fileName);
+
                     using (Stream stream = System.IO.File.Create(path))
                     {
                         await model.Image.CopyToAsync(stream);
