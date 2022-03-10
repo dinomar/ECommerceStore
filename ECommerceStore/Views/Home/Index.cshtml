@@ -1,8 +1,43 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ECommerceStore.Models.ViewModels.ProductListViewModel
+
+@{
+    ViewData["Title"] = "Store";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="row">
+    <div class="col-3">
+        <div class="list-group list-group-flush">
+              <a href="#" class="list-group-item list-group-item-action active">Cras justo odio</a>
+              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+              <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+              <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+        </div>
+    </div>
+
+    <div class="col-9">
+
+        @{
+            int lineNr = 0;
+            int lines = Model.Products.Count() / 3;
+
+            while (lines >= lineNr)
+            {
+                var line = Model.Products.Skip(lineNr * 3).Take(3);
+
+                <div class="row">
+                    @foreach (Product item in line)
+                    {
+                        @await Html.PartialAsync("ProductSummary", item);
+                    }
+                </div>
+                
+                lineNr++;
+            }
+        }
+    </div>
 </div>

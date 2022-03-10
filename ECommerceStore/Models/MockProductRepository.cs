@@ -50,6 +50,14 @@ namespace ECommerceStore.Models
                 Price = 12999M,
                 Catagory = _catagories[0].Name // Electronics
             },
+            new Product
+            {
+                Id = 2,
+                Name = "Canon SX0 Digital Camera",
+                Description = "Canon SX0 Digital Camera",
+                Price = 2999M,
+                Catagory = _catagories[0].Name // Electronics
+            },
 
             new Product
             {

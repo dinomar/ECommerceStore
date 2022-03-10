@@ -1,4 +1,5 @@
 ﻿using ECommerceStore.Models;
+using ECommerceStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +13,20 @@ namespace ECommerceStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProductRepository _productRepo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
         {
             _logger = logger;
+            _productRepo = productRepository;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(new ProductListViewModel
+            {
+                Products = _productRepo.Products
+            });
         }
 
         public IActionResult Privacy()
