@@ -15,4 +15,8 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RandomIdGeneratorLib\RandomIdGeneratorLib.csproj" />
+  </ItemGroup>
+
 </Project>
