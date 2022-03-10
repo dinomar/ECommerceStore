@@ -14,18 +14,21 @@ namespace ECommerceStore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepo;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _logger = logger;
             _productRepo = productRepository;
+            _categoryRepo = categoryRepository;
         }
 
         public IActionResult Index()
         {
             return View(new ProductListViewModel
             {
-                Products = _productRepo.Products
+                Products = _productRepo.Products, // TODO: first 6, random 6.
+                Catagories = _categoryRepo.Catagories.Select(c => c.Name)
             });
         }
 
