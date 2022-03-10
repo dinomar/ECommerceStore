@@ -6,31 +6,36 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
 using RandomIdGeneratorLib;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerceStore.Controllers
 {
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly IProductRepository _repo;
+        private readonly IProductRepository _productRepo;
+        private readonly ICategoryRepository _categoryRepo;
         private readonly IWebHostEnvironment _env;
 
-        public ProductController(ILogger<ProductController> logger, IProductRepository repository, IWebHostEnvironment environment)
+        public ProductController(ILogger<ProductController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository, IWebHostEnvironment environment)
         {
             _logger = logger;
-            _repo = repository;
+            _productRepo = productRepository;
+            _categoryRepo = categoryRepository;
             _env = environment;
         }
 
         public IActionResult Index()
         {
-            return View(_repo.Products);
+            return View(_productRepo.Products);
         }
 
         public IActionResult Create()
         {
-            // bootstrap fix
-            // return catagory select list
+            var list = _categoryRepo.Catagories.Select(c => new SelectListItem(c.Name, c.Name)).ToArray();
+            ViewBag.Catagories = _categoryRepo.Catagories.Select(c => new SelectListItem(c.Name, c.Name));
+
             return View();
         }
 
@@ -53,12 +58,19 @@ namespace ECommerceStore.Controllers
                     model.Product.Image = fileName;
                 }
 
-                // if catagory exists, else return err.
+                Catagory foundCatagory = _categoryRepo.Catagories.FirstOrDefault(c => c.Name == model.Product.Name);
+                if (foundCatagory == null)
+                {
+                    ModelState.AddModelError(string.Empty, "catagory doesn't exist.");
+                    ViewBag.Catagories = _categoryRepo.Catagories.Select(c => new SelectListItem(c.Name, c.Name));
+                    return View(model);
+                }
 
-                _repo.Save(model.Product);
+                _productRepo.Save(model.Product);
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Catagories = _categoryRepo.Catagories.Select(c => new SelectListItem(c.Name, c.Name));
             return View(model);
         }
     }
