@@ -15,6 +15,7 @@ namespace ECommerceStore.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepo;
         private readonly ICategoryRepository _categoryRepo;
+        private readonly int _productsPerPage = 6;
 
         public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
@@ -23,13 +24,31 @@ namespace ECommerceStore.Controllers
             _categoryRepo = categoryRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery]string catagory = "", [FromQuery]int page = 1)
         {
-            return View(new ProductListViewModel
+            ProductListViewModel viewModel = new ProductListViewModel
             {
-                Products = _productRepo.Products, // TODO: first 6, random 6.
-                Catagories = _categoryRepo.Catagories.Select(c => c.Name)
-            });
+                //Products = _productRepo.Products.Skip((page - 1) * _productsPerPage).Take(_productsPerPage), //.Orderby
+                Catagories = _categoryRepo.Catagories.Select(c => c.Name),
+                CurrentPage = page
+            };
+
+            if (!string.IsNullOrEmpty(catagory) && _categoryRepo.Contains(catagory))
+            {
+                viewModel.CurrentCatagory = catagory;
+                viewModel.Products = _productRepo.Products
+                    .Where(p => p.Catagory == catagory)
+                    .Skip((page - 1) * _productsPerPage)
+                    .Take(_productsPerPage);
+            }
+            else
+            {
+                viewModel.Products = _productRepo.Products
+                    .Skip((page - 1) * _productsPerPage)
+                    .Take(_productsPerPage);
+            }
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

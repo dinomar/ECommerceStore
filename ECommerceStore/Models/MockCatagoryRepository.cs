@@ -42,5 +42,18 @@ namespace ECommerceStore.Models
                 }
             }
         }
+
+        public bool Contains(string catagory)
+        {
+            foreach (Catagory item in _categories)
+            {
+                if (item.Name.ToLower() == catagory.ToLower())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -10,41 +10,77 @@
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-md-3"> @*Catagories*@
         <div class="list-group list-group-flush">
             @foreach (var catagory in Model.Catagories)
             {
-                @if (Model.CurrentCatagory == catagory)
+                @if (!string.IsNullOrEmpty(Model.CurrentCatagory) && Model.CurrentCatagory.ToLower() == catagory.ToLower())
                 {
-                    <a href="#" class="list-group-item list-group-item-action active">@catagory</a>
+                    <a class="list-group-item list-group-item-action active" asp-controller="Home" asp-action="Index" asp-route-catagory="@catagory">@catagory</a>
                 }
                 else
                 {
-                    <a href="#" class="list-group-item list-group-item-action">@catagory</a>
+                    <a class="list-group-item list-group-item-action" asp-controller="Home" asp-action="Index" asp-route-catagory="@catagory">@catagory</a>
                 }
             }
         </div>
     </div>
 
-    <div class="col-9">
-
+    <div class="col-md-9"> @*Products*@
+        <div class="row">
         @{
-            int lineNr = 0;
-            int lines = Model.Products.Count() / 3;
-
-            while (lines >= lineNr)
+            int i = 0;
+            foreach (Product item in Model.Products)
             {
-                var line = Model.Products.Skip(lineNr * 3).Take(3);
+                if (i == 3)
+                {
+                    <div class="w-100"></div>
+                    i = 0;
+                }
 
-                <div class="row">
-                    @foreach (Product item in line)
-                    {
-                        @await Html.PartialAsync("ProductSummary", item);
-                    }
-                </div>
-                
-                lineNr++;
+                @await Html.PartialAsync("ProductSummary", item);
+                i++;
             }
         }
+        </div>
     </div>
 </div>
+
+<nav class="mt-4"> @*Pagination*@
+    <ul class="pagination justify-content-center">
+
+        @if(Model.CurrentPage > 1)
+        {
+            <li class="page-item"><a class="page-link" asp-controller="Home" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@(Model.CurrentPage - 1)">Previous</a></li>
+        }
+        else
+        {
+            <li class="page-item disabled"><a class="page-link">Previous</a></li>
+        }
+        
+        @if (Model.CurrentPage < 3)
+        {
+            @for (int x = 1; x <= 3; x++)
+            {
+                if (Model.CurrentPage == x)
+                {
+                    <li class="page-item active"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@x">@x</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@x">@x</a></li>
+                }
+            }
+        }
+        else
+        {
+            <li class="page-item"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@(Model.CurrentPage - 1)">@(Model.CurrentPage - 1)</a></li>
+
+            <li class="page-item active"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@(Model.CurrentPage)">@(Model.CurrentPage)</a></li>
+
+            <li class="page-item"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@(Model.CurrentPage + 1)">@(Model.CurrentPage + 1)</a></li>
+        }
+
+        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-catagory="@Model.CurrentCatagory" asp-route-page="@(Model.CurrentPage + 1)">Next</a></li>
+    </ul>
+</nav>

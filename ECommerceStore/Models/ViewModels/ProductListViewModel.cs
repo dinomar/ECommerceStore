@@ -8,5 +8,6 @@ namespace ECommerceStore.Models.ViewModels
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<string> Catagories { get; set; }
         public string CurrentCatagory { get; set; }
+        public int CurrentPage { get; set; }
     }
 }
