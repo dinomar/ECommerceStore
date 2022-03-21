@@ -8,6 +8,8 @@
             <p>@Model.Price.ToString("c")</p>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             <button class="btn btn-success btn-sm">Add to cart</button>
+
+            <p>@ViewContext.HttpContext.Request.PathAndQuery()</p>
         </div>
     </div>
 </div>

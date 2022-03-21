@@ -28,7 +28,6 @@ namespace ECommerceStore.Controllers
         {
             ProductListViewModel viewModel = new ProductListViewModel
             {
-                //Products = _productRepo.Products.Skip((page - 1) * _productsPerPage).Take(_productsPerPage), //.Orderby
                 Catagories = _categoryRepo.Catagories.Select(c => c.Name),
                 CurrentPage = page
             };
