@@ -7,9 +7,12 @@
             <h5 class="card-title">@Model.Name</h5>
             <p>@Model.Price.ToString("c")</p>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="btn btn-success btn-sm">Add to cart</button>
 
-            <p>@ViewContext.HttpContext.Request.PathAndQuery()</p>
+            <form class="addCartForm" asp-controller="Cart" asp-action="Add" method="post">
+                <input type="hidden" asp-for="@Model.Id" />
+                <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+                <button type="submit" class="btn btn-success btn-sm" >Add to cart</button>
+            </form>
         </div>
     </div>
 </div>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ECommerceStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Cart</h1>
+
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+        <a class="btn btn-success mb-4" href="#">Checkout</a>
+    </li>
+</ul>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.ActionLink("Remove", "Remove", new { id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<ul class="nav">
+    <li class="nav-item">
+        <a class="btn btn-danger mt-2" asp-controller="Cart" asp-action="Clear">Clear Cart</a>
+    </li>
+</ul>

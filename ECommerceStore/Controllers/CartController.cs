@@ -10,58 +10,88 @@ namespace ECommerceStore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepo;
-        private readonly Cart _cart;
+        private Cart _cart;
 
         public CartController(ILogger<HomeController> logger, IProductRepository productRepository)
         {
             _logger = logger;
             _productRepo = productRepository;
-
-            _cart = HttpContext.Session.GetJson<Cart>("cart");
         }
 
         public IActionResult Index()
         {
-            return View();
+            loadCart();
+            return View(_cart.Items);
         }
 
         [HttpPost]
-        public IActionResult Add(int productId)
+        public IActionResult Add(int id, string returnUrl, bool preventRedirect)
         {
-            Product product = _productRepo.Products.FirstOrDefault(p => p.Id == productId);
+            Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
+                loadCart();
                 _cart.Add(product, 1);
-                return Ok();
+                saveCart();
+                if (preventRedirect)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Redirect(returnUrl);
+                }
+                
             }
             else
             {
-                return BadRequest(new
+                if (preventRedirect)
                 {
-                    Error = "Product not found."
-                });
+                    return BadRequest(new
+                    {
+                        Error = "Product not found."
+                    });
+                }
+                else
+                {
+                    return Redirect(returnUrl);
+                }
             }
         }
 
-        public IActionResult Add(int productId, string returnUrl)
+        public IActionResult Remove([FromRoute] int id)
         {
-            Product product = _productRepo.Products.FirstOrDefault(p => p.Id == productId);
+            Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
-                _cart.Add(product, 1);
-                // add to cast
+                loadCart();
+                _cart.Remove(product);
+                saveCart();
             }
 
-            // Redirect
-            // return RedirectToAction("Index", "Home", new { returnUrl });
-            return View();
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Remove()
+        public IActionResult Clear()
         {
-            return View();
+            loadCart();
+            _cart.Clear();
+            saveCart();
+            return RedirectToAction(nameof(Index));
         }
 
-        // @ViewContext.HttpContext.Request.PathAndQuery()
+        private void loadCart()
+        {
+            _cart = HttpContext.Session.GetJson<Cart>("cart");
+            if (_cart == null)
+            {
+                _cart = new Cart();
+            }
+        }
+
+        private void saveCart()
+        {
+            HttpContext.Session.SetJson("cart", _cart);
+        }
     }
 }
