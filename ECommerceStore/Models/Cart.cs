@@ -8,9 +8,9 @@ namespace ECommerceStore.Models
         private List<CartItem> _items = new List<CartItem>();
         private int _index = 1;
 
-        public IEnumerable<CartItem> Items => _items;
+        public virtual IEnumerable<CartItem> Items => _items;
 
-        public void Add(Product product, int quantity)
+        public virtual void Add(Product product, int quantity)
         {
             CartItem item = _items.FirstOrDefault(i => i.Id == product.Id);
             if (item == null)
@@ -30,12 +30,12 @@ namespace ECommerceStore.Models
             }
         }
 
-        public void Remove(Product product)
+        public virtual void Remove(Product product)
         {
             _items.RemoveAll(i => i.Product.Id == product.Id);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _items.Clear();
         }

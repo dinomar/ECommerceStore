@@ -1,6 +1,7 @@
 using ECommerceStore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,9 @@ namespace ECommerceStore
         {
             services.AddSingleton<ICategoryRepository, MockCatagoryRepository>();
             services.AddSingleton<IProductRepository, MockProductRepository>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<Cart>(serviceProvider => SessionCart.GetCart(serviceProvider));
 
             services.AddControllersWithViews();
 

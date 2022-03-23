@@ -12,15 +12,15 @@ namespace ECommerceStore.Controllers
         private readonly IProductRepository _productRepo;
         private Cart _cart;
 
-        public CartController(ILogger<HomeController> logger, IProductRepository productRepository)
+        public CartController(ILogger<HomeController> logger, IProductRepository productRepository, Cart cart)
         {
             _logger = logger;
             _productRepo = productRepository;
+            _cart = cart;
         }
 
         public IActionResult Index()
         {
-            loadCart();
             return View(_cart.Items);
         }
 
@@ -30,9 +30,7 @@ namespace ECommerceStore.Controllers
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
-                loadCart();
                 _cart.Add(product, 1);
-                saveCart();
                 if (preventRedirect)
                 {
                     return Ok();
@@ -64,9 +62,7 @@ namespace ECommerceStore.Controllers
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
-                loadCart();
                 _cart.Remove(product);
-                saveCart();
             }
 
             return RedirectToAction(nameof(Index));
@@ -74,24 +70,8 @@ namespace ECommerceStore.Controllers
 
         public IActionResult Clear()
         {
-            loadCart();
             _cart.Clear();
-            saveCart();
             return RedirectToAction(nameof(Index));
-        }
-
-        private void loadCart()
-        {
-            _cart = HttpContext.Session.GetJson<Cart>("cart");
-            if (_cart == null)
-            {
-                _cart = new Cart();
-            }
-        }
-
-        private void saveCart()
-        {
-            HttpContext.Session.SetJson("cart", _cart);
         }
     }
 }
