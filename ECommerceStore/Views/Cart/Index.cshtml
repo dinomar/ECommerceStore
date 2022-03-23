@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ECommerceStore.Models.CartItem>
+﻿@model ECommerceStore.Models.Cart
 
 @{
     ViewData["Title"] = "Cart";
@@ -8,37 +8,50 @@
 
 <ul class="nav justify-content-end">
     <li class="nav-item">
-        <a class="btn btn-success mb-4" href="#">Checkout</a>
+        <a class="btn btn-primary mb-4" href="#">Checkout</a>
     </li>
 </ul>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Product.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
+            <th>Quantity</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Subtotal</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Items) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.ActionLink("Remove", "Remove", new { id=item.Id })
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @item.Product.Price.ToString("c")
+            </td>
+            <td>
+                @((item.Quantity * item.Product.Price).ToString("c"))
+            </td>
+            <td>
+                <form asp-action="Remove" method="post">
+                    <input type="hidden" name="Id" value="@item.Product.Id" />
+                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                </form>
             </td>
         </tr>
 }
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right">@Model.TotalValue.ToString("c")</td>
+        </tr>
+    </tfoot>
 </table>
 
 <ul class="nav">

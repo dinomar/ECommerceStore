@@ -10,6 +10,7 @@ namespace ECommerceStore.Models
 
         public virtual IEnumerable<CartItem> Items => _items;
         public int ItemsInCart { get => Items.Sum(i => i.Quantity); }
+        public decimal TotalValue { get => Items.Sum(e => e.Product.Price * e.Quantity); }
 
         public virtual void Add(Product product, int quantity)
         {

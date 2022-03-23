@@ -21,7 +21,7 @@ namespace ECommerceStore.Controllers
 
         public IActionResult Index()
         {
-            return View(_cart.Items);
+            return View(_cart);
         }
 
         [HttpPost]
@@ -57,7 +57,8 @@ namespace ECommerceStore.Controllers
             }
         }
 
-        public IActionResult Remove([FromRoute] int id)
+        [HttpPost]
+        public IActionResult Remove([FromForm] int id)
         {
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
