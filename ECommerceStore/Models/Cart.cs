@@ -9,6 +9,7 @@ namespace ECommerceStore.Models
         private int _index = 1;
 
         public virtual IEnumerable<CartItem> Items => _items;
+        public int ItemsInCart { get => Items.Sum(i => i.Quantity); }
 
         public virtual void Add(Product product, int quantity)
         {
