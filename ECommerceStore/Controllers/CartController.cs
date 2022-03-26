@@ -3,9 +3,11 @@ using ECommerceStore.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ECommerceStore.Controllers
 {
+    //[Authorize(Roles = "Admins")]
     public class CartController : Controller
     {
         private readonly ILogger<HomeController> _logger;

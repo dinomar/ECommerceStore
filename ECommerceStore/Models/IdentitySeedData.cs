@@ -9,7 +9,7 @@ namespace ECommerceStore.Models
     {
         private const string _adminEmail = "admin@store.local";
         private const string _adminName = "Admin";
-        private const string _adminPassword = "admin123$";
+        private const string _adminPassword = "Admin123$";
 
         private const string _adminRole = "Admins";
 
