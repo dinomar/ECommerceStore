@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,14 @@ namespace ECommerceStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["ConnectionStrings:IdentityConnectionString"]);
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>();
+
             services.AddSingleton<ICategoryRepository, MockCatagoryRepository>();
             services.AddSingleton<IProductRepository, MockProductRepository>();
 
@@ -57,6 +67,7 @@ namespace ECommerceStore
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -65,6 +76,11 @@ namespace ECommerceStore
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                IdentitySeedData.EnsurePopulated(scope.ServiceProvider).Wait();
+            }
         }
     }
 }
