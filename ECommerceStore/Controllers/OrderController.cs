@@ -22,6 +22,18 @@ namespace ECommerceStore.Controllers
         //[Authorize]
         public IActionResult Index() => View(_orderRepo.Orders.OrderByDescending(o => o.Id));
 
+        //[Authorize]
+        public IActionResult Details([FromRoute]int id)
+        {
+            Order order = _orderRepo.Orders.FirstOrDefault(o => o.Id == id);
+            if (order != null)
+            {
+                return View(order);
+            }
+
+            return View();
+        }
+
         public IActionResult Checkout() => View();
 
         [HttpPost]

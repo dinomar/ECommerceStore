@@ -37,6 +37,7 @@ namespace ECommerceStore
 
             services.AddSingleton<ICategoryRepository, MockCatagoryRepository>();
             services.AddSingleton<IProductRepository, MockProductRepository>();
+            services.AddSingleton<IOrderRepository, MockOrderRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<Cart>(serviceProvider => SessionCart.GetCart(serviceProvider));

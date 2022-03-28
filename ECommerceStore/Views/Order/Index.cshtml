@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<ECommerceStore.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
 }
 
-<h1>Index</h1>
+<h1>Orders</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -24,7 +21,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.AddressLine1)
             </th>
             <th>
@@ -44,7 +41,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Country)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -55,7 +52,14 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Shipped)
+                    @if (item.Shipped)
+                    {
+                        <span>Shipped</span>
+                    }
+                    else
+                    {
+                        <span>Not Shipped</span>
+                    }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -63,7 +67,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.AddressLine1)
             </td>
             <td>
@@ -83,11 +87,13 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Country)
-            </td>
+            </td>*@
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                <button class="btn btn-sm btn-danger" >Ship</button>
+                @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
             </td>
         </tr>
 }
