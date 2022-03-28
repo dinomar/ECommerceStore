@@ -30,15 +30,16 @@ namespace ECommerceStore.Models
         {
             if (catagory.Id == 0)
             {
-                catagory.Id = _categories.Last().Id + 1;
+                int nextId = _categories.Select(o => o.Id).Max() + 1;
+                catagory.Id = nextId;
                 _categories.Add(catagory);
             }
             else
             {
-                Catagory temp = _categories.FirstOrDefault(c => c.Id == catagory.Id);
-                if (temp != null)
+                int index = _categories.FindIndex(o => o.Id == catagory.Id);
+                if (index > 0)
                 {
-                    temp.Name = catagory.Name;
+                    _categories[index] = catagory;
                 }
             }
         }

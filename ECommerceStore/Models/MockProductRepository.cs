@@ -116,17 +116,16 @@ namespace ECommerceStore.Models
         {
             if (product.Id == 0)
             {
-                product.Id = _products.Last().Id + 1;
+                int nextId = _products.Select(o => o.Id).Max() + 1;
+                product.Id = nextId;
                 _products.Add(product);
             }
             else
             {
-                Product temp = _products.FirstOrDefault(p => p.Id == product.Id);
-                if (temp != null)
+                int index = _products.FindIndex(o => o.Id == product.Id);
+                if (index > 0)
                 {
-                    temp.Name = product.Name;
-                    temp.Description = product.Description;
-                    temp.Price = product.Price;
+                    _products[index] = product;
                 }
             }
         }

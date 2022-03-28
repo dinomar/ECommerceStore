@@ -1,12 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerceStore.Models
 {
     public class Order
     {
+        [BindNever]
         public int Id { get; set; }
+
+        [BindNever]
         public ICollection<CartItem> CartItems { get; set; }
+
+        [BindNever]
         public bool Shipped { get; set; }
 
         [Required(ErrorMessage = "Please enter your first name")]
