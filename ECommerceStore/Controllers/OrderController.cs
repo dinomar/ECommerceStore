@@ -34,6 +34,20 @@ namespace ECommerceStore.Controllers
             return View();
         }
 
+        //[Authorize]
+        [HttpPost]
+        public IActionResult MarkShipped([FromForm]int id)
+        {
+            Order order = _orderRepo.Orders.FirstOrDefault(o => o.Id == id);
+            if (order != null)
+            {
+                order.Shipped = true;
+                _orderRepo.Save(order);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult Checkout() => View();
 
         [HttpPost]
@@ -49,7 +63,7 @@ namespace ECommerceStore.Controllers
                 model.CartItems = _cart.Items.ToArray();
                 _orderRepo.Save(model);
                 _cart.Clear();
-                return RedirectToAction(""); // TODO
+                return RedirectToAction("Index", "Payment");
             }
             else
             {
