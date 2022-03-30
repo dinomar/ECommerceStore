@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace ECommerceStore.Controllers
 {
+    //[Authorize(Roles = "Admins")]
     public class OrderController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,10 +20,8 @@ namespace ECommerceStore.Controllers
             _cart = cart;
         }
 
-        //[Authorize]
         public IActionResult Index() => View(_orderRepo.Orders.OrderByDescending(o => o.Id));
 
-        //[Authorize]
         public IActionResult Details([FromRoute]int id)
         {
             Order order = _orderRepo.Orders.FirstOrDefault(o => o.Id == id);
@@ -34,8 +33,8 @@ namespace ECommerceStore.Controllers
             return View();
         }
 
-        //[Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult MarkShipped([FromForm]int id)
         {
             Order order = _orderRepo.Orders.FirstOrDefault(o => o.Id == id);
@@ -48,9 +47,11 @@ namespace ECommerceStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         public IActionResult Checkout() => View();
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Checkout(Order model)
         {
             if (_cart.Items.Count() == 0)

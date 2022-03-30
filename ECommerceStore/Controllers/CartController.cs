@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ECommerceStore.Controllers
 {
-    //[Authorize(Roles = "Admins")]
     public class CartController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -27,6 +26,7 @@ namespace ECommerceStore.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Add(int id, string returnUrl, bool preventRedirect)
         {
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);
@@ -60,6 +60,7 @@ namespace ECommerceStore.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Remove([FromForm] int id)
         {
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);

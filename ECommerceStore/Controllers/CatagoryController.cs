@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceStore.Controllers
 {
+    //[Authorize(Roles = "Admins")]
     public class CatagoryController : Controller
     {
         private readonly ILogger<CatagoryController> _logger;
@@ -30,6 +31,7 @@ namespace ECommerceStore.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Catagory catagory)
         {
             if (ModelState.IsValid)

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerceStore.Controllers
 {
+    //[Authorize(Roles = "Admins")]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
@@ -40,6 +41,7 @@ namespace ECommerceStore.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateProductViewModel model)
         {
             if (ModelState.IsValid)
