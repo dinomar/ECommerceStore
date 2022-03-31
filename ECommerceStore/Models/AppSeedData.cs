@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerceStore.Models
@@ -11,17 +12,14 @@ namespace ECommerceStore.Models
         {
             new Catagory
             {
-                Id = 1,
                 Name = "Electronics"
             },
             new Catagory
             {
-                Id = 2,
                 Name = "Outdoor"
             },
             new Catagory
             {
-                Id = 3,
                 Name = "Office"
             }
         };
@@ -30,7 +28,6 @@ namespace ECommerceStore.Models
         {
             new Product
             {
-                Id = 1,
                 Name = "Dell 24\" Monitor | Black",
                 Description = "Dell 24\" Monitor | Black",
                 Price = 3199M,
@@ -39,7 +36,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 2,
                 Name = "HP Notebook 255 G8",
                 Description = "HP Notebook 255 G8",
                 Price = 8999M,
@@ -48,7 +44,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 3,
                 Name = "Canon SX540 Digital Camera Black",
                 Description = "Canon SX540 Digital Camera Black",
                 Price = 12999M,
@@ -57,7 +52,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 4,
                 Name = "Canon SX0 Digital Camera",
                 Description = "Canon SX0 Digital Camera",
                 Price = 2999M,
@@ -67,7 +61,6 @@ namespace ECommerceStore.Models
 
             new Product
             {
-                Id = 5,
                 Name = "Oztrail Tasman Dome Tent",
                 Description = "Oztrail Tasman Dome Tent",
                 Price = 849M,
@@ -76,7 +69,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 6,
                 Name = "Outdoor Wood Burning Camping Stove & Grill",
                 Description = "Outdoor Wood Burning Camping Stove & Grill",
                 Price = 699M,
@@ -85,7 +77,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 7,
                 Name = "Eiger Vacuum Flask - 700ml",
                 Description = "Eiger Vacuum Flask - 700ml",
                 Price = 279M,
@@ -95,7 +86,6 @@ namespace ECommerceStore.Models
 
             new Product
             {
-                Id = 8,
                 Name = "Canon Pixma TS5340 Printer",
                 Description = "Canon Pixma TS5340 Printer",
                 Price = 1298M,
@@ -104,7 +94,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 9,
                 Name = "Typek Box A4 White Copier Paper",
                 Description = "Typek Box A4 White Copier Paper",
                 Price = 369M,
@@ -113,7 +102,6 @@ namespace ECommerceStore.Models
             },
             new Product
             {
-                Id = 10,
                 Name = "Parrot A4 Clipboard",
                 Description = "Parrot A4 Clipboard",
                 Price = 29M,
@@ -124,18 +112,25 @@ namespace ECommerceStore.Models
 
         public static void EnsurePopulated(IServiceProvider serviceProvider)
         {
-            ICategoryRepository catagoryRepo = serviceProvider.GetRequiredService<EFCatagoryRepository>();
-            IProductRepository productRepo = serviceProvider.GetRequiredService<EFProductRepository>();
+            AppDbContext context = serviceProvider.GetRequiredService<AppDbContext>();
 
             foreach (Catagory catagory in _catagories)
             {
-                catagoryRepo.Save(catagory);
+                if (context.Catagories.FirstOrDefault(c => c.Name == catagory.Name) == null)
+                {
+                    context.Catagories.Add(catagory);
+                }
             }
 
             foreach (Product product in _products)
             {
-                productRepo.Save(product);
+                if (context.Products.FirstOrDefault(p => p.Name == product.Name) == null)
+                {
+                    context.Products.Add(product);
+                }
             }
+
+            context.SaveChanges();
         }
     }
 }

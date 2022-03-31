@@ -27,6 +27,11 @@ namespace ECommerceStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["ConnectionStrings:ApplicationConnectionString"]);
+            });
+
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionStrings:IdentityConnectionString"]);
@@ -35,9 +40,13 @@ namespace ECommerceStore
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
 
-            services.AddSingleton<ICategoryRepository, MockCatagoryRepository>();
-            services.AddSingleton<IProductRepository, MockProductRepository>();
-            services.AddSingleton<IOrderRepository, MockOrderRepository>();
+            services.AddTransient<ICategoryRepository, EFCatagoryRepository>();
+            services.AddTransient<IProductRepository, EFProductRepository>();
+            services.AddTransient<IOrderRepository, EFOrderRepository>();
+
+            //services.AddSingleton<ICategoryRepository, MockCatagoryRepository>();
+            //services.AddSingleton<IProductRepository, MockProductRepository>();
+            //services.AddSingleton<IOrderRepository, MockOrderRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<Cart>(serviceProvider => SessionCart.GetCart(serviceProvider));
@@ -81,6 +90,7 @@ namespace ECommerceStore
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 IdentitySeedData.EnsurePopulated(scope.ServiceProvider).Wait();
+                AppSeedData.EnsurePopulated(scope.ServiceProvider);
             }
         }
     }
