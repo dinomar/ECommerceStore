@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ECommerceStore.Controllers
 {
-    [Authorize(Roles = "Admins")]
+    //[Authorize(Roles = "Admins")]
     public class OrderController : Controller
     {
         private readonly ILogger<HomeController> _logger;

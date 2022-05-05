@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,10 @@ namespace ECommerceStore.Models
 
         [BindNever]
         public bool Shipped { get; set; }
+
+        [BindNever]
+        [DisplayName("Reference Nr")]
+        public string ReferenceNr { get; set; }
 
         [Required(ErrorMessage = "Please enter your first name")]
         public string FirstName { get; set; }

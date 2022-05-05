@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using RandomIdGeneratorLib;
 
 namespace ECommerceStore.Models
 {
@@ -20,6 +21,7 @@ namespace ECommerceStore.Models
             _context.AttachRange(order.CartItems.Select(l => l.Product));
             if (order.Id == 0)
             {
+                order.ReferenceNr = IdGenerator.Generate(9, excludeLowerCase: true, excludeUpperCase: true);
                 _context.Orders.Add(order);
             }
             else
