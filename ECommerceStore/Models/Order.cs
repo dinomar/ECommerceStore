@@ -22,6 +22,14 @@ namespace ECommerceStore.Models
         [Required(ErrorMessage = "Please enter your last name")]
         public string LastName { get; set; }
 
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Please enter your email address")]
+        [EmailAddress]
+        public string Email { get; set; }
+
         [Required(ErrorMessage = "Please enter your address")]
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }

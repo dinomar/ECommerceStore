@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using RandomIdGeneratorLib;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ECommerceStore.Controllers
 {
-    //[Authorize(Roles = "Admins")]
+    [Authorize(Roles = "Admins")]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;

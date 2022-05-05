@@ -31,6 +31,8 @@ namespace ECommerceStore.Models
                     dbEntry.Shipped = order.Shipped;
                     dbEntry.FirstName = order.FirstName;
                     dbEntry.LastName = order.LastName;
+                    dbEntry.PhoneNumber = order.PhoneNumber;
+                    dbEntry.Email = order.Email;
                     dbEntry.AddressLine1 = order.AddressLine1;
                     dbEntry.AddressLine2 = order.AddressLine2;
                     dbEntry.AddressLine3 = order.AddressLine3;

@@ -1,4 +1,5 @@
 ﻿using ECommerceStore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceStore.Controllers
 {
-    //[Authorize(Roles = "Admins")]
+    [Authorize(Roles = "Admins")]
     public class CatagoryController : Controller
     {
         private readonly ILogger<CatagoryController> _logger;
