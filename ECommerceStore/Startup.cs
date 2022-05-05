@@ -29,12 +29,14 @@ namespace ECommerceStore
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["ConnectionStrings:ApplicationConnectionString"]);
+                options.UseSqlite(Configuration["ConnectionStrings:ApplicationConnectionString"]);
+                //options.UseSqlServer(Configuration["ConnectionStrings:ApplicationConnectionString"]);
             });
 
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["ConnectionStrings:IdentityConnectionString"]);
+                options.UseSqlite(Configuration["ConnectionStrings:IdentityConnectionString"]);
+                //options.UseSqlServer(Configuration["ConnectionStrings:IdentityConnectionString"]);
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
