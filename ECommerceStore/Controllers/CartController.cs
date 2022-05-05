@@ -26,7 +26,6 @@ namespace ECommerceStore.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Add(int id, string returnUrl, bool preventRedirect)
         {
             Product product = _productRepo.Products.FirstOrDefault(p => p.Id == id);

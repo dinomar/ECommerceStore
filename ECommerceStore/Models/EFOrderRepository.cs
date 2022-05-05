@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ECommerceStore.Models
@@ -12,10 +13,11 @@ namespace ECommerceStore.Models
             _context = appDbContext;
         }
 
-        public IEnumerable<Order> Orders => _context.Orders;
+        public IEnumerable<Order> Orders => _context.Orders.Include(o => o.CartItems).ThenInclude(c => c.Product);
 
         public void Save(Order order)
         {
+            _context.AttachRange(order.CartItems.Select(l => l.Product));
             if (order.Id == 0)
             {
                 _context.Orders.Add(order);

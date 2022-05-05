@@ -6,7 +6,7 @@ namespace ECommerceStore.Models
     public class Cart
     {
         private List<CartItem> _items = new List<CartItem>();
-        private int _index = 1;
+        //private int _index = 1;
 
         public virtual IEnumerable<CartItem> Items => _items;
         public int ItemsInCart { get => Items.Sum(i => i.Quantity); }
@@ -19,12 +19,12 @@ namespace ECommerceStore.Models
             {
                 _items.Add(new CartItem
                 {
-                    Id = _index,
+                    //Id = _index,
                     Product = product,
                     Quantity = quantity
                 });
 
-                _index++;
+                //_index++;
             }
             else
             {
